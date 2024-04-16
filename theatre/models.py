@@ -47,8 +47,8 @@ def play_image_path(instance, filename) -> pathlib.Path:
 class Play(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField(max_length=255)
-    actors = models.ManyToManyField(Actor)
-    genres = models.ManyToManyField(Genre)
+    actors = models.ManyToManyField(Actor, blank=True)
+    genres = models.ManyToManyField(Genre, blank=True)
     image = models.ImageField(null=True, upload_to=play_image_path)
 
     class Meta:
