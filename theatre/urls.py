@@ -12,6 +12,4 @@ router.register("/performances", PerformanceViewSet)
 
 app_name = "theatre"
 
-urlpatterns = [
-    path("", include(router.urls))
-]
+urlpatterns = router.urls
