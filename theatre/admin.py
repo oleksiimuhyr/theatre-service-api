@@ -2,4 +2,7 @@ from django.contrib import admin
 
 from theatre.models import Play
 
-admin.site.register(Play)
+
+@admin.register(Play)
+class PlayAdmin(admin.ModelAdmin):
+    pass
