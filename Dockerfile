@@ -1,4 +1,5 @@
-FROM python:3.12.1-slim
+FROM python:3.12.0-alpine3.18
+LABEL maintainer="1.2.aznch@gmail.com"
 
 ENV PYTHONUNBUFFERED 1
 
@@ -8,14 +9,15 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN mkdir -p /files/media
+
+RUN mkdir -p /vol/web/media
 
 RUN adduser \
-    --disabled-password \
-    --no-create-home \
-     app-user
+    --disabled-password\
+    --no-create-home\
+    django-user
 
-RUN chown -R app-user /files/media
-RUN chmod -R 755 /files/media
+RUN chown -R django-user:django-user /vol/
+RUN chmod -R 755 /vol/web/
 
-USER app-user
+USER django-user
