@@ -1,6 +1,9 @@
+import pathlib
+import uuid
+
 from django.conf import settings
 from django.db import models
-from rest_framework.exceptions import ValidationError
+from django.utils.text import slugify
 
 
 class Actor(models.Model):
@@ -35,11 +38,18 @@ class TheatreHall(models.Model):
         return self.name
 
 
+def play_image_path(instance, filename) -> pathlib.Path:
+    filename = f"{slugify(instance.title)}-{uuid.uuid4()}" + (
+        pathlib.Path(filename).suffix)
+    return pathlib.Path("upload/plays/") / pathlib.Path(filename)
+
+
 class Play(models.Model):
     title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField(max_length=255)
     actors = models.ManyToManyField(Actor)
     genres = models.ManyToManyField(Genre)
+    image = models.ImageField(null=True, upload_to=play_image_path)
 
     class Meta:
         ordering = ["id"]

@@ -1,10 +1,12 @@
 from datetime import datetime
 
 from django.db.models import Count, F
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.response import Response
 
 from theatre.models import (
     Genre,
@@ -29,7 +31,7 @@ from theatre.serializers import (
     PlayListSerializer,
     ReservationSerializer,
     ReservationListSerializer,
-    TicketSerializer,
+    TicketSerializer, PlayImageSerializer, PlayCreateSerializer,
 )
 
 
@@ -84,10 +86,30 @@ class PlayViewSet(mixins.CreateModelMixin,
     def get_serializer_class(self):
         if self.action == "list":
             return PlayListSerializer
+
         if self.action == "retrieve":
             return PlayDetailSerializer
 
+        if self.action == "create":
+            return PlayCreateSerializer
+
+        if self.action == "upload_image":
+            return PlayImageSerializer
+
         return PlaySerializer
+
+    @action(
+        methods=["POST"],
+        detail=TokenAuthentication,
+        permission_classes=[IsAdminUser],
+        url_path="upload-image",
+    )
+    def upload_image(self, request, pk=None):
+        movie = self.get_object()
+        serializer = self.get_serializer(movie, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         """Retrieve the plays with filters"""
