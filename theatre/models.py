@@ -32,7 +32,7 @@ class TheatreHall(models.Model):
         return self.rows * self.seats_in_row
 
     def __str__(self):
-        return f"{self.name} with {self.rows} rows"
+        return self.name
 
 
 class Play(models.Model):
@@ -46,7 +46,7 @@ class Play(models.Model):
         verbose_name_plural = "plays"
 
     def __str__(self):
-        return f"{self.title} (id = {self.id})"
+        return self.title
 
 
 class Performance(models.Model):
@@ -66,7 +66,7 @@ class Reservation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def __str__(self):
         return str(self.created_at)
@@ -82,23 +82,34 @@ class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
 
-    def clean(self):
-        for ticket_attr_value, ticket_attr_name, theatre_hall_attr_name in [
-            (self.row, "row", "count_rows"),
-            (self.seat, "seat", "count_seats_in_row"),
-        ]:
-            count_attrs = getattr(
-                self.performance.theatre_hall, theatre_hall_attr_name
+    @staticmethod
+    def validate_seat(seat: int, num_seats: int, error_to_raise):
+        if not (1 <= seat <= num_seats):
+            raise error_to_raise(
+                {
+                    "seat": f"{seat} "
+                            f"number must be in range: "
+                            f"(1, {num_seats}): "
+                            f"but we got {num_seats})"
+                }
             )
-            if not (1 <= ticket_attr_value <= count_attrs):
-                raise ValidationError(
-                    {
-                        ticket_attr_name: f"{ticket_attr_name} number "
-                        f"must be in available range: "
-                        f"(1, {theatre_hall_attr_name}): "
-                        f"(1, {count_attrs})"
-                    }
-                )
+
+    def clean(self):
+        Ticket.validate_seat(
+            self.seat, self.performance.theatre_hall.seats_in_row, ValueError
+        )
+
+    def save(
+            self,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None,
+    ):
+        self.full_clean()
+        super(Ticket, self).save(
+            force_insert, force_update, using, update_fields
+        )
 
     def __str__(self):
         return (
