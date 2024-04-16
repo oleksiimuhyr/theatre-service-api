@@ -37,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'theatre',
+    'rest_framework',
+    'user',
 ]
+
+AUTH_USER_MODEL = 'theatre.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -49,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'theatre_service_api.urls'
+ROOT_URLCONF = 'theatre_service.urls'
 
 TEMPLATES = [
     {
