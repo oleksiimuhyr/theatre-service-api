@@ -10,8 +10,8 @@ from theatre.serializers import PlaySerializer
 @api_view(['GET', 'POST'])
 def plays_list(request: HttpRequest) -> Response:
     if request.method == 'GET':
-        movies = Play.objects.all()
-        serializer = PlaySerializer(movies, many=True)
+        plays = Play.objects.all()
+        serializer = PlaySerializer(plays, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         serializer = PlaySerializer(data=request.data)
@@ -22,15 +22,15 @@ def plays_list(request: HttpRequest) -> Response:
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def plays_detail(request: HttpRequest, pk: int) -> Response:
-    movie = get_object_or_404(Play, pk=pk)
+    play = get_object_or_404(Play, pk=pk)
     if request.method == 'GET':
-        serializer = PlaySerializer(movie)
+        serializer = PlaySerializer(play)
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
-        serializer = PlaySerializer(movie, data=request.data)
+        serializer = PlaySerializer(play, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
-        movie.delete()
+        play.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

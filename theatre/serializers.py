@@ -7,7 +7,7 @@ class PlaySerializer(serializers.ModelSerializer):
         model = Play
         fields = ("id", "title", "description")
 
-    id = serializers.IntegerField(read_only=True, unique=True)
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField(max_length=100, required=True)
     description = serializers.CharField(max_length=255)
 
