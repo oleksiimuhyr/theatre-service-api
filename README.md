@@ -19,7 +19,7 @@ Installation
 
 Clone the repository:
 
-git clone https://github.com/kstorozhenko/Theatre-API-Service
+git clone https://github.com/oleksiimuhyr/theatre_service_api
 
 Navigate to the project directory:
 
