@@ -4,3 +4,9 @@ __pycache__/
 db.sqlite3
 media/uploads/plays
 .env
+/theatre/migrations/0003_performance_reservation_ticket.py
+/theatre/migrations/0004_alter_reservation_options_play_image.py
+/theatre/migrations/0005_alter_play_actors_alter_play_genres.py
+/media/upload/plays/funny-blood-18e0561c-b993-4b4a-85a5-7a0dd09f8fc9.jpg
+/media/upload/plays/test-a938dfbf-c9d3-490c-ad43-d1a90ffe844a.jpg
+/media/upload/plays/test-baca5452-deaa-4f5b-82f5-6cbba8bbb200.jpg

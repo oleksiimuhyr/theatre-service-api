@@ -1,4 +1,3 @@
-from django.urls import path, include
 from theatre.views import (GenreViewSet, ActorViewSet, TheatreHallViewSet,
                            PlayViewSet, PerformanceViewSet)
 from rest_framework import routers

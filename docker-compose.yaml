@@ -10,7 +10,7 @@ services:
     volumes:
       - ./:/app
       - my_media:/files/media
-    command:
+    command: >
       sh -c "python manage.py wait_for_db &&
       python manage.py migrate &&
       python manage.py runserver 0.0.0.0:8000"
@@ -19,7 +19,7 @@ services:
 
 
   db:
-    image: postgres:16.0-alpine3.18
+    image: postgres:16.0-alpine3.17
     restart: always
     env_file:
       - .env
